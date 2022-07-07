@@ -22,7 +22,7 @@ public class HtmlParseUtil {
             System.out.println(content);
         }
     }
-    private List<Content> parseJD(String keywords) throws IOException {
+    public List<Content> parseJD(String keywords) throws IOException {
         String url = "https://search.jd.com/Search?keyword="+keywords;
         //解析网页jsoup实现,解析出来的就是js中的document对象
         Document document = Jsoup.parse(new URL(url), 30000);
