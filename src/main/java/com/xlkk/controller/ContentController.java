@@ -24,6 +24,6 @@ public class ContentController {
     public List<Map<String,Object>> search(@PathVariable("keyword") String keyword,
                                            @PathVariable("pageNo") int pageNo,
                                            @PathVariable("pageSize") int pageSize) throws IOException {
-        return contentService.searchPage(keyword, pageNo, pageSize);
+        return contentService.highLightSeach(keyword, pageNo, pageSize);
     }
 }
