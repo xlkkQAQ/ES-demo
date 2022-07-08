@@ -1,3 +1,4 @@
+# es-jd-demo
 这是一个训练elasticsearch的小demo。
 使用Jsoup来爬取JD商城的html，并进行解析获取我们想要的数据，如：商品的img、title、price等等；
 将这些数据添加到elasticsearch中，以便我们之后进行搜索；

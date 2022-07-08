@@ -10,4 +10,7 @@ import java.util.Map;
 public interface ContentService {
     boolean parseContent(String keywords);
     List<Map<String,Object>> searchPage(String keyword, int pageNo, int pageSize) throws IOException;
-}
+
+    List<Map<String,Object>> highLightSeach(String keyword,int pageNo,int pageSize) throws IOException;
+
+    }

@@ -21,6 +21,7 @@ import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -94,7 +95,50 @@ public class ContentServiceImpl implements ContentService {
             list.add(source);
         }
         return list;
-
     }
+
+    /**
+     * 实现高亮搜索
+     * @param  keyword
+     * @param  pageNo
+     * @param  pageSize
+     * @return List<Map<String,Object>>
+     * @throws IOException
+     */
+    @Override
+    public List<Map<String,Object>> highLightSeach(String keyword,int pageNo,int pageSize) throws IOException {
+        if(pageNo<=1){
+            pageNo = 1;
+        }
+        //条件搜索
+        SearchRequest searchRequest = new SearchRequest("jd_goods");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        //分页
+        searchSourceBuilder.from(pageNo);
+        searchSourceBuilder.size(pageSize);
+        //精准匹配关键字
+        TermQueryBuilder query = QueryBuilders.termQuery("title", keyword);
+        searchSourceBuilder.query(query);
+        searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+
+        //高亮搜索
+        HighlightBuilder highlightBuilder = new HighlightBuilder();
+        highlightBuilder.field("title");
+        //关闭多个高亮
+//        highlightBuilder.requireFieldMatch(false);
+        highlightBuilder.preTags("<span style='color:red'>");
+        highlightBuilder.postTags("</span>");
+        searchSourceBuilder.highlighter(highlightBuilder);
+        //执行
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchHits hits = searchResponse.getHits();
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+        for (SearchHit hit : hits) {
+
+        }
+        return list;
+    }
+
 
 }
