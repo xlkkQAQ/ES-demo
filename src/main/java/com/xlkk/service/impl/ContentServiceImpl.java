@@ -17,6 +17,7 @@ import org.elasticsearch.client.common.TimeUtil;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -78,9 +79,12 @@ public class ContentServiceImpl implements ContentService {
         searchSourceBuilder.from(pageNo);
         searchSourceBuilder.size(pageSize);
         //精准匹配关键字
-        QueryBuilders.termQuery("title",keyword);
+        TermQueryBuilder query = QueryBuilders.termQuery("title", keyword);
+        searchSourceBuilder.query(query);
         searchSourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+
         //执行
+
         searchRequest.source(searchSourceBuilder);
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         SearchHits hits = searchResponse.getHits();
